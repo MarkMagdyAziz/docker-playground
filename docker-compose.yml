@@ -1,0 +1,28 @@
+
+services:
+
+  drupal:
+    image: drupal:10-apache
+    ports:
+     - 8080:80
+    volumes:
+      - drupal-modules:/var/www/html/modules
+      - drupal-profiles:/var/www/html/profiles
+      - drupal-sites:/var/www/html/sites
+      - drupal-themes:/var/www/html/themes
+    restart: always
+  postgres:
+    image: postgres:16
+    environment:
+       POSTGRES_PASSWORD: example
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    restart: always
+
+# This top-level key explicitly defines the named volumes
+volumes:
+  drupal-modules:
+  drupal-profiles:
+  drupal-sites:
+  drupal-themes:
+  db-data:
