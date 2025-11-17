@@ -1,28 +1,26 @@
-
+version: "3.8"
 services:
-
-  drupal:
-    image: drupal:10-apache
+  web-fe:
+    build: .
+    command: python app.py
     ports:
-     - 8080:80
+      - target: 5000
+        published: 5000
+    networks:
+      - frontend-net
     volumes:
-      - drupal-modules:/var/www/html/modules
-      - drupal-profiles:/var/www/html/profiles
-      - drupal-sites:/var/www/html/sites
-      - drupal-themes:/var/www/html/themes
-    restart: always
-  postgres:
-    image: postgres:16
-    environment:
-       POSTGRES_PASSWORD: example
-    volumes:
-      - db-data:/var/lib/postgresql/data
-    restart: always
+      - type: volume
+        source: counter-vol
+        target: /code
+  redis:
+    image: "redis:alpine"
+    networks:
+      backend-net:
 
-# This top-level key explicitly defines the named volumes
+networks:
+   backend-net:
+     internal: true
+   frontend-net:
+
 volumes:
-  drupal-modules:
-  drupal-profiles:
-  drupal-sites:
-  drupal-themes:
-  db-data:
+  counter-vol:
